@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Models;
 using Todo.Repositories;
-
 namespace Todo.Controllers {
 
     [Authorize]
@@ -10,9 +9,9 @@ namespace Todo.Controllers {
     [Route("/api/todos")]
     public class TodoController : ControllerBase {
 
-        [HttpGet()]
+        [HttpGet]
         public IActionResult ListAll([FromServices] ITodoRepository repository) {
-            return Ok(repository.ListAll());
+            return Ok(repository.ListAll(new Guid(User.Identity.Name)));
         }
 
         [HttpGet("{id}")]
@@ -20,12 +19,13 @@ namespace Todo.Controllers {
             return Ok(repository.FindById(new Guid(id)));
         }
 
-
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult Create([FromBody] TodoModel todo, [FromServices] ITodoRepository repository) {
             if (!ModelState.IsValid) {
                 return BadRequest();
             }
+            todo.UserId = new Guid(User.Identity.Name);
             repository.Create(todo);
 
             return Ok();

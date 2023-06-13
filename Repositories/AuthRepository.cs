@@ -36,7 +36,7 @@ namespace Todo.Repositories {
 
             SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor {
                 Subject = new System.Security.Claims.ClaimsIdentity(new Claim[]{
-                    new Claim("userId", user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(30),
                 SigningCredentials = new SigningCredentials(

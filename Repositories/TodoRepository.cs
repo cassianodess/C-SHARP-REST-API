@@ -3,7 +3,7 @@ using Todo.Models;
 
 namespace Todo.Repositories {
     public interface ITodoRepository {
-        List<TodoModel> ListAll();
+        List<TodoModel> ListAll(Guid userId);
         TodoModel FindById(Guid id);
         void Create(TodoModel todo);
         void Update(Guid id, TodoModel todo);
@@ -18,8 +18,8 @@ namespace Todo.Repositories {
             this._context = _context;
         }
 
-        public List<TodoModel> ListAll() {
-            return this._context.Todo.ToList();
+        public List<TodoModel> ListAll(Guid userId) {
+            return this._context.Todo.Where(todo => todo.UserId == userId).ToList();
         }
 
         public TodoModel FindById(Guid id) {
